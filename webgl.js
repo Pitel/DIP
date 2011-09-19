@@ -1,6 +1,6 @@
 $(function() {
 	var width = 800, height = 600;
-	var container = $("body");;
+	var container = $("body");
 	var renderer = new THREE.WebGLRenderer();
 	var scene = new THREE.Scene();
 	
