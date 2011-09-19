@@ -20,7 +20,7 @@ $(function() {
 	stats.domElement.style.right = 0;
 	container.append(stats.domElement);
 	
-	frame(renderer, scene, camera);
+	frame();
 	
 	function frame() {
 		cube.rotation.x += 0.01;
