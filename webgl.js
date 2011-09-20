@@ -4,12 +4,19 @@ $(function() {
 	var renderer = new THREE.WebGLRenderer();
 	var scene = new THREE.Scene();
 	
-	var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true}));
+	var ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true}));
+	ground.rotation.x = Math.PI/2;	//Normals up?
 	
-	scene.addObject(cube);
+	scene.addObject(ground);
 	
-	var camera = new THREE.Camera(60, width/height);
-	camera.position.z = 500;
+	var camera = new THREE.FirstPersonCamera({
+		fov: 60,
+		aspect: width/height,
+		lookSpeed: 0.1,
+		movementSpeed: 1000,
+		noFly: false
+	});
+	camera.position.y = 200;
 	renderer.setSize(width, height);
 	
 	container.append(renderer.domElement);
@@ -23,8 +30,6 @@ $(function() {
 	frame();
 	
 	function frame() {
-		cube.rotation.x += 0.01;
-		cube.rotation.y += 0.02;
 		stats.update();
 		renderer.render(scene, camera);
 		requestAnimationFrame(frame);
