@@ -1,13 +1,13 @@
 $(function() {
-	var width = 800, height = 600;
-	var container = $("body");
-	var renderer = new THREE.WebGLRenderer();
+	var width = window.innerWidth, height = window.innerHeight;
+	var container = $("<div>").prependTo("body");
+	var renderer = new THREE.WebGLRenderer({antialias: true});
 	var scene = new THREE.Scene();
 	
 	var ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true}));
 	ground.rotation.x = Math.PI/2;	//Normals up?
 	
-	scene.addObject(ground);
+	scene.add(ground);
 	
 	var camera = new THREE.FirstPersonCamera({
 		fov: 60,
