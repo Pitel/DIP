@@ -33,8 +33,8 @@ $(function() {
 	frame();
 	
 	function frame() {
+		requestAnimationFrame(frame);
 		stats.update();
 		renderer.render(scene, camera);
-		requestAnimationFrame(frame);
 	}
 });
