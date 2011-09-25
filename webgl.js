@@ -7,9 +7,9 @@ $(function() {
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	var scene = new THREE.Scene();
 	
-	
-	var terrain = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0, wireframe: true}));
-	terrain.rotation.x = Math.PI/2;	//Normals up?
+	var wire = true;
+	var terrain = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0, wireframe: wire}));
+	terrain.rotation.x = -Math.PI / 2;
 	
 	scene.add(terrain);
 	
@@ -28,6 +28,7 @@ $(function() {
 	gui.add(terrain.materials[0].color, "r", 0, 1);
 	gui.add(terrain.materials[0].color, "g", 0, 1);
 	gui.add(terrain.materials[0].color, "b", 0, 1);
+	gui.add(terrain.materials[0], "wireframe");
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
