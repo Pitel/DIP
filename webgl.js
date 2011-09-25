@@ -8,10 +8,15 @@ $(function() {
 	var scene = new THREE.Scene();
 	
 	var wire = true;
-	var terrain = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0, wireframe: wire}));
+	var terrain = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshLambertMaterial({color: 0, wireframe: wire}));
 	terrain.rotation.x = -Math.PI / 2;
 	
+	var sun = new THREE.PointLight(0xffffff);
+	sun.position.y = 1000;
+	sun.position.z = 1000;
+	
 	scene.add(terrain);
+	scene.add(sun);
 	
 	var camera = new THREE.FirstPersonCamera({
 		fov: 60,
@@ -36,7 +41,7 @@ $(function() {
 	stats.domElement.style.right = 0;
 	container.append(stats.domElement);
 	
-	$(":not(> canvas)", container).hover(function() {camera.activeLook = false});
+	$("div").hover(function() {camera.activeLook = false});
 	$("> canvas", container).hover(function() {camera.activeLook = true});
 	
 	frame();
