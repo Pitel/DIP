@@ -7,10 +7,11 @@ $(function() {
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	var scene = new THREE.Scene();
 	
-	var ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0, wireframe: true}));
-	ground.rotation.x = Math.PI/2;	//Normals up?
 	
-	scene.add(ground);
+	var terrain = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 200, 200), new THREE.MeshBasicMaterial({color: 0, wireframe: true}));
+	terrain.rotation.x = Math.PI/2;	//Normals up?
+	
+	scene.add(terrain);
 	
 	var camera = new THREE.FirstPersonCamera({
 		fov: 60,
@@ -24,9 +25,9 @@ $(function() {
 	container.append(renderer.domElement);
 	
 	var gui = new DAT.GUI();
-	gui.add(ground.materials[0].color, "r", 0, 1);
-	gui.add(ground.materials[0].color, "g", 0, 1);
-	gui.add(ground.materials[0].color, "b", 0, 1);
+	gui.add(terrain.materials[0].color, "r", 0, 1);
+	gui.add(terrain.materials[0].color, "g", 0, 1);
+	gui.add(terrain.materials[0].color, "b", 0, 1);
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
