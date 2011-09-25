@@ -40,7 +40,7 @@ $(function() {
 	gui.add(terrain.materials[0].uniforms.diffuse.value, "g", 0, 1);
 	gui.add(terrain.materials[0].uniforms.diffuse.value, "b", 0, 1);
 	//gui.add(terrain.materials[0].uniforms.phase, "value", 0, Math.PI * 2).name("phase");
-	//gui.add(terrain.materials[0], "wireframe");
+	gui.add(terrain.materials[0], "wireframe");
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
