@@ -34,7 +34,7 @@ $(function() {
 	stats.domElement.style.right = 0;
 	container.append(stats.domElement);
 	
-	$("div").hover(function() {camera.activeLook = false});
+	$(":not(> canvas)", container).hover(function() {camera.activeLook = false});
 	$("> canvas", container).hover(function() {camera.activeLook = true});
 	
 	frame();
