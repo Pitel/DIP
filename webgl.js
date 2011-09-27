@@ -23,6 +23,7 @@ $(function() {
 	var sun = new THREE.DirectionalLight();
 	sun.position.y = 1000;
 	sun.position.z = 1000;
+	sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
 	scene.add(sun);
 	
 	var camera = new THREE.FirstPersonCamera({
