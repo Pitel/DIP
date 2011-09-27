@@ -6,12 +6,13 @@ $(function() {
 	var container = $("body");
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	var scene = new THREE.Scene();
-	//scene.fog = new THREE.Fog(0xffffff, 1000, 2000);
+	scene.fog = new THREE.Fog(0xffffff, 1500, 2000);
 	
 	var geometry = new THREE.PlaneGeometry(2000, 2000, 200, 200);
 	//var material = new THREE.MeshLambertMaterial();
 	var material = new THREE.ShaderMaterial(THREE.ShaderLib.lambert);
 	material.lights = true;
+	material.fog = true;
 	material.wireframe = true;
 	material.uniforms.phase = {type: "f", value: 0};
 	var terrain = new THREE.Mesh(geometry, material);
