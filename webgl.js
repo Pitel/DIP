@@ -11,10 +11,9 @@ $(function() {
 	var geometry = new THREE.PlaneGeometry(2000, 2000, 200, 200);
 	var material = new THREE.ShaderMaterial({
 		vertexShader: vertexShader,
-		uniforms: {phase: {type: "f", value: 0}},
-		wireframe: true
+		uniforms: {phase: {type: "f", value: 0}}
 	});
-	var terrain = new THREE.Mesh(geometry, [material, new THREE.MeshLambertMaterial()]);
+	var terrain = new THREE.Mesh(geometry, [new THREE.MeshLambertMaterial(), material]);
 	terrain.rotation.x = -Math.PI / 2;
 	scene.add(terrain);
 	
@@ -35,12 +34,12 @@ $(function() {
 	container.append(renderer.domElement);
 	
 	var gui = new DAT.GUI();
-	gui.add(terrain.materials[1].color, "r", 0, 1);
-	gui.add(terrain.materials[1].color, "g", 0, 1);
-	gui.add(terrain.materials[1].color, "b", 0, 1);
+	gui.add(terrain.materials[0].color, "r", 0, 1);
+	gui.add(terrain.materials[0].color, "g", 0, 1);
+	gui.add(terrain.materials[0].color, "b", 0, 1);
 	//gui.add(terrain.materials[0].uniforms.phase, "value", 0, Math.PI * 2).name("phase");
-	gui.add(terrain.materials[1], "wireframe");
 	gui.add(terrain.materials[0], "wireframe");
+	gui.add(terrain.materials[1], "wireframe");
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
@@ -56,7 +55,7 @@ $(function() {
 	function frame() {
 		requestAnimationFrame(frame);
 		stats.update();
-		terrain.materials[0].uniforms.phase.value += 0.05;
+		terrain.materials[1].uniforms.phase.value += 0.05;
 		renderer.render(scene, camera);
 	}
 });
