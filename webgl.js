@@ -26,7 +26,7 @@ $(function() {
 	sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
 	scene.add(sun);
 	
-	var camera = new THREE.FirstPersonCamera({
+	var camera = new THREE.FirstPersonControls({
 		fov: 60,
 		aspect: width/height,
 		lookSpeed: 0.1,
