@@ -26,13 +26,13 @@ $(function() {
 	sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
 	scene.add(sun);
 	
-	var camera = new THREE.FirstPersonControls({
-		fov: 60,
-		aspect: width/height,
-		lookSpeed: 0.1,
-		movementSpeed: 1000
-	});
+	var camera = new THREE.PerspectiveCamera(60, width / height);
 	camera.position.y = 200;
+	var control = new THREE.FirstPersonControls(camera);
+	control.lookSpeed = 0.1;
+	control.movementSpeed = 1000;
+	scene.add(camera);
+	
 	renderer.setSize(width, height);
 	
 	container.append(renderer.domElement);
@@ -50,14 +50,15 @@ $(function() {
 	stats.domElement.style.right = 0;
 	container.append(stats.domElement);
 	
-	$("div").hover(function() {camera.activeLook = false});
-	$("> canvas", container).hover(function() {camera.activeLook = true});
+	$("div").hover(function() {control.activeLook = false});
+	$("> canvas", container).hover(function() {control.activeLook = true});
 	
 	frame();
 	
 	function frame() {
 		requestAnimationFrame(frame);
 		stats.update();
+		control.update();
 		terrain.materials[0].uniforms.phase.value += 0.05;
 		renderer.render(scene, camera);
 	}
