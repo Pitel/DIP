@@ -38,11 +38,11 @@ $(function() {
 	container.append(renderer.domElement);
 	
 	var gui = new DAT.GUI();
-	gui.add(terrain.materials[0].uniforms.diffuse.value, "r", 0, 1);
-	gui.add(terrain.materials[0].uniforms.diffuse.value, "g", 0, 1);
-	gui.add(terrain.materials[0].uniforms.diffuse.value, "b", 0, 1);
+	gui.add(terrain.material.uniforms.diffuse.value, "r", 0, 1);
+	gui.add(terrain.material.uniforms.diffuse.value, "g", 0, 1);
+	gui.add(terrain.material.uniforms.diffuse.value, "b", 0, 1);
 	//gui.add(terrain.materials[0].uniforms.phase, "value", 0, Math.PI * 2).name("phase");
-	gui.add(terrain.materials[0], "wireframe");
+	gui.add(terrain.material, "wireframe");
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
@@ -58,8 +58,8 @@ $(function() {
 	function frame() {
 		requestAnimationFrame(frame);
 		stats.update();
-		control.update();
-		terrain.materials[0].uniforms.phase.value += 0.05;
+		//control.update();
+		terrain.material.uniforms.phase.value += 0.05;
 		renderer.render(scene, camera);
 	}
 });
