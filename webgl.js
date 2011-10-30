@@ -5,6 +5,7 @@ $(function() {
 	var width = $(window).width(), height = $(window).height();
 	var container = $("body");
 	var renderer = new THREE.WebGLRenderer({antialias: true});
+	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 1500, 2000);
 	
@@ -58,7 +59,7 @@ $(function() {
 	function frame() {
 		requestAnimationFrame(frame);
 		stats.update();
-		//control.update();
+		control.update(clock.getDelta());
 		terrain.material.uniforms.phase.value += 0.05;
 		renderer.render(scene, camera);
 	}
