@@ -10,6 +10,7 @@ $(function() {
 	scene.fog = new THREE.Fog(0xffffff, 1500, 2000);
 	
 	var geometry = new THREE.PlaneGeometry(2000, 2000, 200, 200);
+	geometry.applyMatrix(new THREE.Matrix4().setRotationX(-Math.PI / 2));
 	//var material = new THREE.MeshLambertMaterial();
 	var material = new THREE.ShaderMaterial(THREE.ShaderLib.lambert);
 	material.lights = true;
@@ -17,14 +18,12 @@ $(function() {
 	material.wireframe = true;
 	material.uniforms.phase = {type: "f", value: 0};
 	var terrain = new THREE.Mesh(geometry, material);
-	terrain.rotation.x = -Math.PI / 2;
 	material.vertexShader = vertexShader;
 	scene.add(terrain);
 	
 	var sun = new THREE.DirectionalLight();
-	sun.position.y = 1000;
-	sun.position.z = 1000;
-	sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
+	sun.position.set(1000, 0, 0).normalize();
+	//sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
 	scene.add(sun);
 	
 	var camera = new THREE.PerspectiveCamera(60, width / height);
@@ -60,7 +59,7 @@ $(function() {
 		requestAnimationFrame(frame);
 		stats.update();
 		control.update(clock.getDelta());
-		terrain.material.uniforms.phase.value += 0.05;
+		terrain.material.uniforms.phase.value = clock.getElapsedTime();
 		renderer.render(scene, camera);
 	}
 });
