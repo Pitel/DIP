@@ -11,11 +11,13 @@ $(function() {
 	
 	var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
 	geometry.applyMatrix(new THREE.Matrix4().setScale(1/60, 1/60, 1/60));
-	//var geometry = new THREE.TerrainGeometry(1000, [[0, 0, 0], [0, 1000, 0], [0, 0, 0]]);
+	//geometry = new THREE.TerrainGeometry(1000, [[0, 100, 0], [200, 1000, 300], [0, 500, 0]]);
+	//console.log(geometry.vertices.length);
 	var material = new THREE.MeshLambertMaterial();
 	material.fog = true;
+	//material.wireframe = true;
 	var terrain = new THREE.Mesh(geometry, material);
-	terrain.doubleSided = true;
+	//terrain.doubleSided = true;
 	scene.add(terrain);
 	
 	var sun = new THREE.DirectionalLight();
