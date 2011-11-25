@@ -8,6 +8,7 @@ $(function() {
 	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
+	var lod = new THREE.LOD();
 	
 	var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
 	geometry.applyMatrix(new THREE.Matrix4().setScale(1/60, 1/60, 1/60));
@@ -18,7 +19,42 @@ $(function() {
 	//material.wireframe = true;
 	var terrain = new THREE.Mesh(geometry, material);
 	//terrain.doubleSided = true;
-	scene.add(terrain);
+	lod.addLevel(terrain, 3000);
+	
+	var level = new THREE.Object3D();
+	geometry = new THREE.TerrainGeometry(12000 * 60, dem.tl);
+	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
+	terrain = new THREE.Mesh(geometry, material);
+	terrain.position.x = 12000 / 4;
+	terrain.position.z = -12000 / 4;
+	level.add(terrain);
+	
+	geometry = new THREE.TerrainGeometry(12000 * 60, dem.tr);
+	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
+	terrain = new THREE.Mesh(geometry, material);
+	terrain.position.x = 12000 / 4;
+	terrain.position.z = 12000 / 4;
+	level.add(terrain);
+	
+	geometry = new THREE.TerrainGeometry(12000 * 60, dem.bl);
+	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
+	terrain = new THREE.Mesh(geometry, material);
+	terrain.position.x = -12000 / 4;
+	terrain.position.z = -12000 / 4;
+	level.add(terrain);
+	
+	geometry = new THREE.TerrainGeometry(12000 * 60, dem.br);
+	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
+	terrain = new THREE.Mesh(geometry, material);
+	terrain.position.x = -12000 / 4;
+	terrain.position.z = 12000 / 4;
+	level.add(terrain);
+	
+	console.log(level);
+	
+	//lod.addLevel(new THREE.Mesh(new THREE.SphereGeometry(1000), material));
+	lod.addLevel(level);
+	scene.add(lod);
 	
 	var sun = new THREE.DirectionalLight();
 	sun.position.set(0, 0.5, 1).normalize();
@@ -57,6 +93,7 @@ $(function() {
 		requestAnimationFrame(frame);
 		stats.update();
 		control.update(clock.getDelta());
+		lod.update(camera);
 		renderer.render(scene, camera);
 	}
 });
