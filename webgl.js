@@ -50,9 +50,10 @@ $(function() {
 	terrain.position.z = 12000 / 4;
 	level.add(terrain);
 	
-	console.log(level);
+	//console.log(level);
 	
 	//lod.addLevel(new THREE.Mesh(new THREE.SphereGeometry(1000), material));
+	level.visible = false;
 	lod.addLevel(level);
 	scene.add(lod);
 	
@@ -72,7 +73,8 @@ $(function() {
 	
 	container.append(renderer.domElement);
 	
-	var gui = new DAT.GUI();
+	var gui = new dat.GUI();
+	//gui.addColor(terrain.material, "color");
 	gui.add(terrain.material.color, "r", 0, 1);
 	gui.add(terrain.material.color, "g", 0, 1);
 	gui.add(terrain.material.color, "b", 0, 1);
@@ -93,7 +95,7 @@ $(function() {
 		requestAnimationFrame(frame);
 		stats.update();
 		control.update(clock.getDelta());
-		lod.update(camera);
+		//lod.update(camera);
 		renderer.render(scene, camera);
 	}
 });
