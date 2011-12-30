@@ -5,6 +5,8 @@ $(function() {
 	var width = $(window).width(), height = $(window).height();
 	var container = $("body");
 	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize(width, height);
+	container.append(renderer.domElement);
 	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
@@ -64,14 +66,10 @@ $(function() {
 	
 	var camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 12000);
 	camera.position.y = 10000 / 60;
-	var control = new THREE.FirstPersonControls(camera);
+	var control = new THREE.FirstPersonControls(camera, renderer.domElement);
 	control.lookSpeed = 0.1;
 	control.movementSpeed = 1000;
 	scene.add(camera);
-	
-	renderer.setSize(width, height);
-	
-	container.append(renderer.domElement);
 	
 	var gui = new dat.GUI();
 	//gui.addColor(terrain.material, "color");
@@ -95,7 +93,7 @@ $(function() {
 		requestAnimationFrame(frame);
 		stats.update();
 		control.update(clock.getDelta());
-		//lod.update(camera);
+		lod.update(camera);
 		renderer.render(scene, camera);
 	}
 });
