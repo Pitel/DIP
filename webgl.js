@@ -10,7 +10,7 @@ $(function() {
 	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
-	var lod = new THREE.LOD();
+	var lod = new THREE.ChunkedLOD();
 	
 	var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
 	geometry.applyMatrix(new THREE.Matrix4().setScale(1/60, 1/60, 1/60));
