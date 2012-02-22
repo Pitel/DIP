@@ -44,7 +44,20 @@ class Tiler(BaseHTTPRequestHandler):
 			self.end_headers()
 			self.wfile.write(json.dumps([dataset.RasterXSize, dataset.RasterYSize]))
 		else:
-			self.send_response(404)
+			try:
+				f = open(url.path[1:])
+				self.send_response(200)
+				if url.path.endswith('.js'):
+					self.send_header('Content-type', 'application/javascript')
+				elif url.path.endswith('.css'):
+					self.send_header('Content-type', 'text/css')
+				elif url.path.endswith('.html') or url.path.endswith('.htm'):
+					self.send_header('Content-type', 'text/html')
+				self.end_headers()
+				self.wfile.write(f.read())
+				f.close()
+			except IOError:
+				self.send_error(404)
 
 dataset = gdal.Open(sys.argv[1], GA_ReadOnly)
 print "%s: %d * %d" % (dataset.GetDriver().LongName, dataset.RasterXSize, dataset.RasterYSize)

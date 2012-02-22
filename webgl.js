@@ -12,17 +12,26 @@ $(function() {
 	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
 	var lod = new THREE.ChunkedLOD();
 	
-	var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
-	geometry.applyMatrix(new THREE.Matrix4().setScale(1/60, 1/60, 1/60));
+	//var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
+	var worker = new Worker("TerrainWorker.js");
+	worker.onmessage = function(event) {
+		console.log(event.data);
+		var start = new Date();
+		var geometry = new THREE.TerrainGeometry(event.data.vertices, event.data.faces);
+		console.log(new Date() - start + " ms")
+		var material = new THREE.MeshLambertMaterial();
+		material.fog = true;
+		material.wireframe = true;
+		var terrain = new THREE.Mesh(geometry, material);
+		lod.addLevel(terrain, 3000);
+	}
+	worker.postMessage({"edge": 12000 * 60, "dem": dem});
 	//geometry = new THREE.TerrainGeometry(1000, [[0, 100, 0], [200, 1000, 300], [0, 500, 0]]);
 	//console.log(geometry.vertices.length);
-	var material = new THREE.MeshLambertMaterial();
-	material.fog = true;
 	//material.wireframe = true;
-	var terrain = new THREE.Mesh(geometry, material);
 	//terrain.doubleSided = true;
-	lod.addLevel(terrain, 3000);
 	
+	/*
 	var level = new THREE.Object3D();
 	geometry = new THREE.TerrainGeometry(12000 * 60, dem.tl);
 	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
@@ -57,6 +66,7 @@ $(function() {
 	//lod.addLevel(new THREE.Mesh(new THREE.SphereGeometry(1000), material));
 	level.visible = false;
 	lod.addLevel(level);
+	*/
 	scene.add(lod);
 	
 	var sun = new THREE.DirectionalLight();
@@ -71,12 +81,14 @@ $(function() {
 	control.movementSpeed = 1000;
 	scene.add(camera);
 	
+	/*
 	var gui = new dat.GUI();
 	//gui.addColor(terrain.material, "color");
 	gui.add(terrain.material.color, "r", 0, 1);
 	gui.add(terrain.material.color, "g", 0, 1);
 	gui.add(terrain.material.color, "b", 0, 1);
 	gui.add(terrain.material, "wireframe");
+	*/
 	
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
