@@ -13,60 +13,23 @@ $(function() {
 	var lod = new THREE.ChunkedLOD();
 	
 	//var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
-	var worker = new Worker("TerrainWorker.js");
-	worker.onmessage = function(event) {
-		console.log(event.data);
-		var start = new Date();
-		var geometry = new THREE.TerrainGeometry(event.data.vertices, event.data.faces);
-		console.log(new Date() - start + " ms")
-		var material = new THREE.MeshLambertMaterial();
-		material.fog = true;
-		material.wireframe = true;
-		var terrain = new THREE.Mesh(geometry, material);
-		lod.addLevel(terrain, 3000);
-	}
-	worker.postMessage({"edge": 12000 * 60, "dem": dem});
-	//geometry = new THREE.TerrainGeometry(1000, [[0, 100, 0], [200, 1000, 300], [0, 500, 0]]);
-	//console.log(geometry.vertices.length);
-	//material.wireframe = true;
-	//terrain.doubleSided = true;
-	
+	var geometry = new THREE.PlaneGeometry(12000, 12000, 256, 256);
+	geometry.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
+	var shader = THREE.ShaderUtils.lib["normal"];
 	/*
-	var level = new THREE.Object3D();
-	geometry = new THREE.TerrainGeometry(12000 * 60, dem.tl);
-	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
-	terrain = new THREE.Mesh(geometry, material);
-	terrain.position.x = 12000 / 4;
-	terrain.position.z = -12000 / 4;
-	level.add(terrain);
-	
-	geometry = new THREE.TerrainGeometry(12000 * 60, dem.tr);
-	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
-	terrain = new THREE.Mesh(geometry, material);
-	terrain.position.x = 12000 / 4;
-	terrain.position.z = 12000 / 4;
-	level.add(terrain);
-	
-	geometry = new THREE.TerrainGeometry(12000 * 60, dem.bl);
-	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
-	terrain = new THREE.Mesh(geometry, material);
-	terrain.position.x = -12000 / 4;
-	terrain.position.z = -12000 / 4;
-	level.add(terrain);
-	
-	geometry = new THREE.TerrainGeometry(12000 * 60, dem.br);
-	geometry.applyMatrix(new THREE.Matrix4().setScale(1/120, 1/60, 1/120));
-	terrain = new THREE.Mesh(geometry, material);
-	terrain.position.x = -12000 / 4;
-	terrain.position.z = 12000 / 4;
-	level.add(terrain);
-	
-	//console.log(level);
-	
-	//lod.addLevel(new THREE.Mesh(new THREE.SphereGeometry(1000), material));
-	level.visible = false;
-	lod.addLevel(level);
+	shader.uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("displacement.png");
+	shader.uniforms["uDisplacementBias"].value = 0;
+	shader.uniforms["uDisplacementScale"].value = 0;
 	*/
+	shader.uniforms["uDiffuseColor"].value.setHex(0);
+	shader.uniforms["uAmbientColor"].value.setHex(0);
+	var material = new THREE.MeshLambertMaterial();
+	var material = new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: shader.uniforms, lights: true});
+	material.fog = true;
+	material.wireframe = true;
+	var terrain = new THREE.Mesh(geometry, material);
+	lod.addLevel(terrain, 3000);
+	
 	scene.add(lod);
 	
 	var sun = new THREE.DirectionalLight();
