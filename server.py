@@ -63,5 +63,5 @@ dataset = gdal.Open(sys.argv[1], GA_ReadOnly)
 print "%s: %d * %d" % (dataset.GetDriver().LongName, dataset.RasterXSize, dataset.RasterYSize)
 dem = dataset.ReadAsArray()
 
-print "http://localhost:8000/tile"
+print "http://localhost:8000/index.html"
 HTTPServer(("", 8000), Tiler).serve_forever()
