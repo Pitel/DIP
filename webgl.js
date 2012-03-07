@@ -33,21 +33,19 @@ $(function() {
 
 	var level = new THREE.Object3D();
 
-	var geometry2 = new THREE.PlaneGeometry(6000, 6000, 256, 256);
-	geometry2.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
-	geometry2.computeTangents();
-	var shader2 = THREE.ShaderUtils.lib["normal"];
-	shader2.uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=6000&h=6000&x=3000&y=3000&r=256", new THREE.UVMapping(), function() {
-		shader2.uniforms["tDisplacement"].texture.image.width = 256;
-		shader2.uniforms["tDisplacement"].texture.image.height = 256;
-		shader2.uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(shader2.uniforms["tDisplacement"].texture.image), 1024);
-		shader2.uniforms["tNormal"].texture.needsUpdate = true;
+	geometry = new THREE.PlaneGeometry(6000, 6000, 256, 256);
+	geometry.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
+	geometry.computeTangents();
+	var newuniforms = THREE.UniformsUtils.clone(shader.uniforms);
+	newuniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=6000&h=6000&x=3000&y=3000&r=256", new THREE.UVMapping(), function() {
+		newuniforms["tDisplacement"].texture.image.width = 256;
+		newuniforms["tDisplacement"].texture.image.height = 256;
+		newuniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(newuniforms["tDisplacement"].texture.image), 1024);
+		newuniforms["tNormal"].texture.needsUpdate = true;
 	});
-	shader2.uniforms["uDisplacementBias"].value = -2048;
-	shader2.uniforms["uDisplacementScale"].value = 12000;
-	var material2 = new THREE.ShaderMaterial({fragmentShader: shader2.fragmentShader, vertexShader: shader2.vertexShader, uniforms: shader2.uniforms, lights: true, fog: true, wireframe: true});
-	var terrain2 = new THREE.Mesh(geometry2, material2);
-	level.add(terrain2);
+	material = new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: newuniforms, lights: true, fog: true, wireframe: true});
+	terrain = new THREE.Mesh(geometry, material);
+	level.add(terrain);
 
 	level.visible = false;
 	lod.addLevel(level)
