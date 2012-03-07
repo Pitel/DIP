@@ -33,7 +33,7 @@ $(function() {
 
 	var level = new THREE.Object3D();
 
-	geometry2 = new THREE.PlaneGeometry(6000, 6000, 256, 256);
+	var geometry2 = new THREE.PlaneGeometry(6000, 6000, 256, 256);
 	geometry2.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
 	geometry2.computeTangents();
 	var shader2 = THREE.ShaderUtils.lib["normal"];
