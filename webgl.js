@@ -1,3 +1,17 @@
+function loadDEM(path, mapping, callback) {
+	var image = new Image(), texture = new THREE.Texture(image, mapping);
+	texture.type = THREE.UnsignedShortType;
+	image.onload = function() {
+		texture.needsUpdate = true;
+		if (callback) {
+			callback(this);
+		}
+	}
+	image.crossOrigin = "anonymous";
+	image.src = path;
+	return texture;
+}
+
 $(function() {
 	if (!Detector.webgl) {
 		Detector.addGetWebGLMessage();
@@ -10,18 +24,26 @@ $(function() {
 	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
-	var lod = new THREE.ChunkedLOD();
+	var grid = new THREE.PlaneGeometry(12000, 12000, 256, 256);
+	grid.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
+	//geometry.computeTangents();
+	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid);
+	lod.terrain.visible = true;
+	console.log(lod);
 
 	//var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
+	/*
 	var geometry = new THREE.PlaneGeometry(12000, 12000, 256, 256);
 	geometry.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
 	geometry.computeTangents();
 	var shader = THREE.ShaderUtils.lib["normal"];
 	shader.uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=12000&h=12000&x=0&y=0&r=256", new THREE.UVMapping(), function() {
+		//shader.uniforms["tDisplacement"].texture.image.type = THREE.UnsignedShortType;
+		//shader.uniforms["tDisplacement"].texture.needsUpdate = true;
 		shader.uniforms["tDisplacement"].texture.image.width = 256;
 		shader.uniforms["tDisplacement"].texture.image.height = 256;
-		shader.uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(shader.uniforms["tDisplacement"].texture.image), 1024);
-		shader.uniforms["tNormal"].texture.needsUpdate = true;
+		//shader.uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(shader.uniforms["tDisplacement"].texture.image), 1024);
+		//shader.uniforms["tNormal"].texture.needsUpdate = true;
 	});
 	shader.uniforms["uDisplacementBias"].value = -2048;
 	shader.uniforms["uDisplacementScale"].value = 12000;
@@ -46,9 +68,10 @@ $(function() {
 	material = new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: newuniforms, lights: true, fog: true, wireframe: true});
 	terrain = new THREE.Mesh(geometry, material);
 	level.add(terrain);
+	*/
 
-	level.visible = false;
-	lod.addLevel(level)
+	//level.visible = false;
+	//lod.addLevel(level)
 	scene.add(lod);
 
 	var sun = new THREE.DirectionalLight();
