@@ -27,7 +27,7 @@ $(function() {
 	var grid = new THREE.PlaneGeometry(12000, 12000, 256, 256);
 	grid.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
 	//geometry.computeTangents();
-	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid);
+	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid, 0);
 	lod.terrain.visible = true;
 	console.log(lod);
 
