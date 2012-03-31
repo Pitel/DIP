@@ -23,9 +23,8 @@ $(function() {
 	container.append(renderer.domElement);
 	var clock = new THREE.Clock();
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
+	//scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
 	var grid = new THREE.PlaneGeometry(12000, 12000, 256, 256);
-	grid.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
 	//geometry.computeTangents();
 	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid, 0);
 	lod.terrain.visible = true;

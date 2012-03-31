@@ -17,10 +17,10 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	this.add(this.terrain);
 	var halfx = x1 + w / 2, halfy = y1 + h / 2;
 	this.LODs = new THREE.Object3D();
-	this.LODs.add(new THREE.ChunkedLOD(x1, y1, halfx, halfy, -w / 4, h / 4, grid, level + 1));
-	this.LODs.add(new THREE.ChunkedLOD(halfx, y1, x2, halfy, w / 4, h / 4, grid, level + 1));
+	this.LODs.add(new THREE.ChunkedLOD(x1, y1, halfx, halfy, -w / 4, +h / 4, grid, level + 1));
+	this.LODs.add(new THREE.ChunkedLOD(halfx, y1, x2, halfy, +w / 4, +h / 4, grid, level + 1));
 	this.LODs.add(new THREE.ChunkedLOD(x1, halfy, halfx, y2, -w / 4, -h / 4, grid, level + 1));
-	this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, x2, y2, w / 4, -h / 4, grid, level + 1));
+	this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, x2, y2, +w / 4, -h / 4, grid, level + 1));
 	this.add(this.LODs);
 };
 
