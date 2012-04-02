@@ -1,3 +1,5 @@
+var fov = 60;
+
 function loadDEM(path, mapping, callback) {
 	var image = new Image(), texture = new THREE.Texture(image, mapping);
 	texture.type = THREE.UnsignedShortType;
@@ -17,6 +19,8 @@ $(function() {
 		Detector.addGetWebGLMessage();
 	}
 	var width = $(window).width(), height = $(window).height();
+	THREE.K = width / (2 * Math.tan((fov * Math.PI) / 360));
+	THREE.tau = 2;
 	var container = $("body");
 	var renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setSize(width, height);
@@ -28,7 +32,7 @@ $(function() {
 	//geometry.computeTangents();
 	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid, 0);
 	lod.terrain.visible = true;
-	console.log(lod);
+	//console.log(lod);
 
 	//var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
 	/*
@@ -78,7 +82,7 @@ $(function() {
 	//sun.add(new THREE.Mesh(new THREE.SphereGeometry(), new THREE.MeshBasicMaterial({color: 0xffff00, fog: false})));
 	scene.add(sun);
 
-	var camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 12000);
+	var camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 12000);
 	camera.position.y = 10000 / 60;
 	var control = new THREE.FirstPersonControls(camera, renderer.domElement);
 	control.lookSpeed = 0.1;
@@ -103,6 +107,7 @@ $(function() {
 	$("div").hover(function() {control.activeLook = false});
 	$("> canvas", container).hover(function() {control.activeLook = true});
 
+	//lod.update(camera);
 	frame();
 
 	function frame() {
