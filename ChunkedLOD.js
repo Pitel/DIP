@@ -6,7 +6,6 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	THREE.Object3D.call(this);
 	this.position.x += shiftx;
 	this.position.z += shifty;
-	this.worldpos = this.matrixWorld.getPosition();
 	//this.position.y = 300 * level + Math.random() * 150;	//For debuging,
 	//console.log(w, h);
 	this.terrain = new THREE.Mesh(grid, new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff, fog: false, wireframe: false}));
@@ -15,7 +14,7 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	this.terrain.visible = false;
 	this.add(this.terrain);
 	this.LODs = new THREE.Object3D();
-	if (w / 2 > 600 && h / 2 > 600) {
+	if (w / 2 > 256 && h / 2 > 256) {
 		var halfx = x1 + w / 2, halfy = y1 + h / 2;
 		this.LODs.add(new THREE.ChunkedLOD(x1, y1, halfx, halfy, -w / 4, +h / 4, grid, level + 1));
 		this.LODs.add(new THREE.ChunkedLOD(halfx, y1, x2, halfy, +w / 4, +h / 4, grid, level + 1));
@@ -30,9 +29,9 @@ THREE.ChunkedLOD.prototype.constructor = THREE.ChunkedLOD;
 THREE.ChunkedLOD.prototype.supr = THREE.Object3D.prototype;
 
 THREE.ChunkedLOD.prototype.update = function(camera) {
-	var rho = (this.delta * THREE.K) / this.worldpos.distanceTo(camera.position);
+	var rho = (this.delta * THREE.K) / this.matrixWorld.getPosition().distanceTo(camera.position);
 	//console.log(this.delta, rho, THREE.tau);
-	//console.log(this.delta, this.position.distanceTo(camera.position));
+	//console.log(this.delta, this.worldpos.distanceTo(camera.position));
 	if (rho <= THREE.tau || this.LODs.children.length != 4) {
 		this.terrain.visible = true;
 		THREE.SceneUtils.showHierarchy(this.LODs, false);
