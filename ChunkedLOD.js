@@ -9,30 +9,38 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	//this.position.y = 300 * level + Math.random() * 150;	//For debuging,
 	//console.log(w, h);
 	var shader = THREE.ShaderUtils.lib["normal"];
-	shader.uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=" + w + "&h=" + h + "&x=" + x1 +"&y=" + y1 +"&r=256", new THREE.UVMapping(), function() {
+	var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+	uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=" + w + "&h=" + h + "&x=" + x1 +"&y=" + y1 +"&r=256", new THREE.UVMapping(), function() {
 		//shader.uniforms["tDisplacement"].texture.image.type = THREE.UnsignedShortType;
 		//shader.uniforms["tDisplacement"].texture.needsUpdate = true;
-		shader.uniforms["tDisplacement"].texture.image.width = 256;
-		shader.uniforms["tDisplacement"].texture.image.height = 256;
+		uniforms["tDisplacement"].texture.image.width = 256;
+		uniforms["tDisplacement"].texture.image.height = 256;
 		//shader.uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(shader.uniforms["tDisplacement"].texture.image), 1024);
 		//shader.uniforms["tNormal"].texture.needsUpdate = true;
-		shader.uniforms["uDisplacementBias"].value = -2048;
-		shader.uniforms["uDisplacementScale"].value = 12000;
-		this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: shader.uniforms, lights: false, wireframe: true, fog: false}));
-		var scale = 1 / Math.pow(2, level);
-		this.terrain.scale = new THREE.Vector3(scale, scale, scale);
-		this.terrain.visible = false;
-		this.add(this.terrain);
-		console.log(".")
 	});
+	uniforms["uDisplacementBias"].value = -2048;
+	uniforms["uDisplacementScale"].value = 12000;
+	/*
+	shader.uniforms["uAmbientColor"].value.setHex(0xff0000);
+	shader.uniforms["uDiffuseColor"].value.setHex(0x00ff00);
+	shader.uniforms["uAmbientColor"].value.convertGammaToLinear();
+	shader.uniforms["uDiffuseColor"].value.convertGammaToLinear();
+	*/
+	this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: false, wireframe: true, fog: false}));
+	var scale = 1 / Math.pow(2, level);
+	this.terrain.scale = new THREE.Vector3(scale, scale, scale);
+	this.terrain.visible = false;
+	this.add(this.terrain);
 	this.LODs = new THREE.Object3D();
+	if (level < 2) {	//DEBUG
 	if (w / 2 > 256 && h / 2 > 256) {
 		var halfx = x1 + w / 2, halfy = y1 + h / 2;
-		this.LODs.add(new THREE.ChunkedLOD(x1, y1, halfx, halfy, -w / 4, +h / 4, grid, level + 1));
-		this.LODs.add(new THREE.ChunkedLOD(halfx, y1, x2, halfy, +w / 4, +h / 4, grid, level + 1));
-		this.LODs.add(new THREE.ChunkedLOD(x1, halfy, halfx, y2, -w / 4, -h / 4, grid, level + 1));
-		this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, x2, y2, +w / 4, -h / 4, grid, level + 1));
+		this.LODs.add(new THREE.ChunkedLOD(x1, y1, halfx, halfy, -w / 4, -h / 4, grid, level + 1));
+		this.LODs.add(new THREE.ChunkedLOD(halfx, y1, x2, halfy, -w / 4, +h / 4, grid, level + 1));
+		this.LODs.add(new THREE.ChunkedLOD(x1, halfy, halfx, y2, +w / 4, -h / 4, grid, level + 1));
+		this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, x2, y2, +w / 4, +h / 4, grid, level + 1));
 		this.add(this.LODs);
+	}
 	}
 };
 

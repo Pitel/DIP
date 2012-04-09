@@ -29,52 +29,10 @@ $(function() {
 	var scene = new THREE.Scene();
 	//scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
 	var grid = new THREE.PlaneGeometry(12000, 12000, 256, 256);
-	//geometry.computeTangents();
+	grid.computeTangents();
 	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid, 0);
 	lod.terrain.visible = true;
 	//console.log(lod);
-
-	//var geometry = new THREE.TerrainGeometry(12000 * 60, dem);
-	/*
-	var geometry = new THREE.PlaneGeometry(12000, 12000, 256, 256);
-	geometry.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
-	geometry.computeTangents();
-	var shader = THREE.ShaderUtils.lib["normal"];
-	shader.uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=12000&h=12000&x=0&y=0&r=256", new THREE.UVMapping(), function() {
-		//shader.uniforms["tDisplacement"].texture.image.type = THREE.UnsignedShortType;
-		//shader.uniforms["tDisplacement"].texture.needsUpdate = true;
-		shader.uniforms["tDisplacement"].texture.image.width = 256;
-		shader.uniforms["tDisplacement"].texture.image.height = 256;
-		//shader.uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(shader.uniforms["tDisplacement"].texture.image), 1024);
-		//shader.uniforms["tNormal"].texture.needsUpdate = true;
-	});
-	shader.uniforms["uDisplacementBias"].value = -2048;
-	shader.uniforms["uDisplacementScale"].value = 12000;
-	var material = new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: shader.uniforms, lights: true, wireframe: true});
-	material.fog = true;
-	//material.wireframe = true;
-	var terrain = new THREE.Mesh(geometry, material);
-	lod.addLevel(terrain, 3000);
-
-	var level = new THREE.Object3D();
-
-	geometry = new THREE.PlaneGeometry(6000, 6000, 256, 256);
-	geometry.applyMatrix(new THREE.Matrix4().rotateX(-Math.PI / 2));
-	geometry.computeTangents();
-	var newuniforms = THREE.UniformsUtils.clone(shader.uniforms);
-	newuniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("tile?w=6000&h=6000&x=3000&y=3000&r=256", new THREE.UVMapping(), function() {
-		newuniforms["tDisplacement"].texture.image.width = 256;
-		newuniforms["tDisplacement"].texture.image.height = 256;
-		newuniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(newuniforms["tDisplacement"].texture.image), 1024);
-		newuniforms["tNormal"].texture.needsUpdate = true;
-	});
-	material = new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: newuniforms, lights: true, fog: true, wireframe: true});
-	terrain = new THREE.Mesh(geometry, material);
-	level.add(terrain);
-	*/
-
-	//level.visible = false;
-	//lod.addLevel(level)
 	scene.add(lod);
 
 	var sun = new THREE.DirectionalLight();
@@ -89,14 +47,8 @@ $(function() {
 	control.movementSpeed = 1000;
 	scene.add(camera);
 
-	/*
 	var gui = new dat.GUI();
-	//gui.addColor(terrain.material, "color");
-	gui.add(terrain.material.color, "r", 0, 1);
-	gui.add(terrain.material.color, "g", 0, 1);
-	gui.add(terrain.material.color, "b", 0, 1);
-	gui.add(terrain.material, "wireframe");
-	*/
+	gui.add(THREE, "tau", 0, 10);
 
 	var stats = new Stats();
 	stats.domElement.style.position = "absolute";
