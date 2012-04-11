@@ -31,7 +31,7 @@ $(function() {
 	var grid = new THREE.PlaneGeometry(12000, 12000, 256, 256);
 	grid.computeTangents();
 	var lod = new THREE.ChunkedLOD(0, 0, 12000, 12000, 0, 0, grid, 0);
-	lod.terrain.visible = true;
+	//lod.terrain.visible = true;
 	//console.log(lod);
 	scene.add(lod);
 
