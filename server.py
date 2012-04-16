@@ -60,6 +60,8 @@ class Tiler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/css')
 				elif url.path.endswith('.html') or url.path.endswith('.htm'):
 					self.send_header('Content-type', 'text/html')
+				elif url.path.endswith('.png'):
+					self.send_header('Content-type', 'image/png')
 				self.end_headers()
 				self.wfile.write(f.read())
 				f.close()
