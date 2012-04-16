@@ -19,7 +19,7 @@ $(function() {
 		var scene = new THREE.Scene();
 		//scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
 
-		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 256, 256);
+		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 255, 255);
 		grid.computeTangents();
 		THREE.uDisplacementBias = -2048;
 		THREE.uDisplacementScale = deminfo.w;
