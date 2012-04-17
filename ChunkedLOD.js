@@ -25,9 +25,33 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 		*/
 		uniforms["tDisplacement"].texture.image.width = 256;
 		uniforms["tDisplacement"].texture.image.height = 256;
+
+		// Calculate normal map in worker
+		/*
 		uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(uniforms["tDisplacement"].texture.image), 255);
 		uniforms["tNormal"].texture.needsUpdate = true;
 		uniforms["uNormalScale"].value = 16;
+		*/
+		var canvas = document.createElement("canvas");
+		canvas.width = uniforms["tDisplacement"].texture.image.width;
+		canvas.height = uniforms["tDisplacement"].texture.image.height;
+		var context = canvas.getContext("2d");
+		context.drawImage(uniforms["tDisplacement"].texture.image, 0, 0);
+		var worker = new Worker('NormalWorker.js');
+		worker.onmessage = function(e) {
+			if (level == 0) {
+			console.log(e.data);
+			context.putImageData(e.data, 0, 0);
+			console.log(canvas);
+			//$("body").prepend(canvas);
+			uniforms["tNormal"].texture = canvas;
+			uniforms["tNormal"].texture.needsUpdate = true;
+			uniforms["uNormalScale"].value = 16;
+			}
+		};
+		var dem = context.getImageData(0, 0, canvas.width, canvas.height);
+		worker.postMessage({dem: dem, normal: context.createImageData(canvas.width, canvas.height)});
+
 		uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
 		uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
 		uniforms["uDiffuseColor"].value.setHex(Math.random() * 0xffffff); //Random chunk color

@@ -7,10 +7,10 @@ $(function() {
 	$.getJSON("info.json", function(deminfo) {
 		deminfo.w--;
 		deminfo.h--;
-		console.log(deminfo);
+		//console.log(deminfo);
 		var width = $(window).width(), height = $(window).height();
 		THREE.K = width / (2 * Math.tan((fov * Math.PI) / 360));
-		THREE.tau = 2;
+		THREE.tau = 4;
 		var container = $("body");
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setSize(width, height);
