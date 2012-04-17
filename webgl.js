@@ -29,7 +29,7 @@ $(function() {
 		//console.log(lod);
 		scene.add(lod);
 
-		scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));
+		//scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));
 
 		var sun = new THREE.DirectionalLight();
 		sun.position.set(0, 0.5, 1).normalize();
