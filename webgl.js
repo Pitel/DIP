@@ -10,7 +10,7 @@ $(function() {
 		//console.log(deminfo);
 		var width = $(window).width(), height = $(window).height();
 		THREE.K = width / (2 * Math.tan((fov * Math.PI) / 360));
-		THREE.tau = 4;
+		THREE.tau = 2;
 		var container = $("body");
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setSize(width, height);
