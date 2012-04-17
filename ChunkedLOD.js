@@ -23,26 +23,32 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 		shader.uniforms["tDisplacement"].texture.image.type = THREE.UnsignedShortType;
 		shader.uniforms["tDisplacement"].texture.needsUpdate = true;
 		*/
-		/*
 		uniforms["tDisplacement"].texture.image.width = 256;
 		uniforms["tDisplacement"].texture.image.height = 256;
-		uniforms["tNormal"].texture = new THREE.Texture(THREE.ImageUtils.getNormalMap(uniforms["tDisplacement"].texture.image), 1024);
-		uniforms["tNormal"].texture.needsUpdate = true;
-		*/
-		uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
-		uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
-		uniforms["uAmbientColor"].value.setHex(0xff0000);
-		uniforms["uDiffuseColor"].value.setHex(0x00ff00);
-		//uniforms["uShininess"].value = 255;
-		/*
-		shader.uniforms["uAmbientColor"].value.convertGammaToLinear();
-		shader.uniforms["uDiffuseColor"].value.convertGammaToLinear();
-		*/
-		_this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: false, wireframe: true, fog: false}));
-		var scale = 1 / Math.pow(2, level);
-		_this.terrain.scale = new THREE.Vector3(scale, scale, scale);
-		_this.terrain.visible = false;
-		_this.add(_this.terrain);
+
+		// Calculate normal map in worker
+		var canvas = document.createElement("canvas");
+		canvas.width = uniforms["tDisplacement"].texture.image.width;
+		canvas.height = uniforms["tDisplacement"].texture.image.height;
+		var context = canvas.getContext("2d");
+		context.drawImage(uniforms["tDisplacement"].texture.image, 0, 0);
+		var worker = new Worker('NormalWorker.js');
+		worker.onmessage = function(e) {	//Normals are calculated
+			context.putImageData(e.data, 0, 0);
+			uniforms["tNormal"].texture = new THREE.Texture(canvas);
+			uniforms["tNormal"].texture.needsUpdate = true;
+			uniforms["uNormalScale"].value = 16;
+			uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
+			uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
+			uniforms["uDiffuseColor"].value.setHex(Math.random() * 0xffffff); //Random chunk color
+			_this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, wireframe: THREE.LODwireframe, fog: true}));
+			var scale = 1 / Math.pow(2, level);
+			_this.terrain.scale = new THREE.Vector3(scale, scale, scale);
+			_this.terrain.visible = false;
+			_this.add(_this.terrain);
+		};
+		var dem = context.getImageData(0, 0, canvas.width, canvas.height);
+		worker.postMessage({dem: dem, normal: context.createImageData(canvas.width, canvas.height)});
 	});
 
 };
@@ -78,7 +84,7 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 			//console.log("Loading level " + (this.level + 1));
 			this.terrain.visible = true;
 			this.LODs = new THREE.Object3D();
-			//if (level < 2) {	//DEBUG
+			if (this.level < 3) {	//DEBUG
 			if (this.w / 2 > 256 && this.h / 2 > 256) {
 				var halfx = Math.round(this.x1 + this.w / 2), halfy = Math.round(this.y1 + this.h / 2);
 				this.LODs.add(new THREE.ChunkedLOD(this.x1, this.y1, halfx, halfy, -this.w / 4, -this.h / 4, this.grid, this.level + 1));
@@ -87,7 +93,7 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 				this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, this.x2, this.y2, +this.w / 4, +this.h / 4, this.grid, this.level + 1));
 				this.add(this.LODs);
 			}
-			//}
+			}
 		} else {
 			if (rdy == 4) {	//Chunks are really ready
 				this.terrain.visible = false;
@@ -98,6 +104,27 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 				this.terrain.visible = true;
 				THREE.SceneUtils.showHierarchy(this.LODs, false);
 			}
+		}
+	}
+};
+
+THREE.ChunkedLOD.prototype.wireframe = function() {
+	//console.log(this);
+	this.terrain.material.wireframe = THREE.LODwireframe;
+	if (this.LODs) {
+		for (var i = 0; i < this.LODs.children.length; i++) {
+			this.LODs.children[i].wireframe();
+		}
+	}
+};
+
+THREE.ChunkedLOD.prototype.displacement = function() {
+	//console.log(this);
+	this.terrain.material.uniforms.uDisplacementBias.value = THREE.uDisplacementBias;
+	this.terrain.material.uniforms.uDisplacementScale.value = THREE.uDisplacementScale;
+	if (this.LODs) {
+		for (var i = 0; i < this.LODs.children.length; i++) {
+			this.LODs.children[i].displacement();
 		}
 	}
 };
