@@ -110,21 +110,25 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 
 THREE.ChunkedLOD.prototype.wireframe = function() {
 	//console.log(this);
-	this.terrain.material.wireframe = THREE.LODwireframe;
-	if (this.LODs) {
-		for (var i = 0; i < this.LODs.children.length; i++) {
-			this.LODs.children[i].wireframe();
+	if (this.terrain) {
+		this.terrain.material.wireframe = THREE.LODwireframe;
+		if (this.LODs) {
+			for (var i = 0; i < this.LODs.children.length; i++) {
+				this.LODs.children[i].wireframe();
+			}
 		}
 	}
 };
 
 THREE.ChunkedLOD.prototype.displacement = function() {
 	//console.log(this);
-	this.terrain.material.uniforms.uDisplacementBias.value = THREE.uDisplacementBias;
-	this.terrain.material.uniforms.uDisplacementScale.value = THREE.uDisplacementScale;
-	if (this.LODs) {
-		for (var i = 0; i < this.LODs.children.length; i++) {
-			this.LODs.children[i].displacement();
+	if (this.terrain) {
+		this.terrain.material.uniforms.uDisplacementBias.value = THREE.uDisplacementBias;
+		this.terrain.material.uniforms.uDisplacementScale.value = THREE.uDisplacementScale;
+		if (this.LODs) {
+			for (var i = 0; i < this.LODs.children.length; i++) {
+				this.LODs.children[i].displacement();
+			}
 		}
 	}
 };
