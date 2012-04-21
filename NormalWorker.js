@@ -20,11 +20,11 @@ onmessage = function(e) {
 	var height = dem.height;
 
 	for (var x = 0; x < width; x++) {
-		for (var y = 1; y < height; y++) {
-			var ly = y - 1 < 0 ? height - 1 : y - 1;
-			var uy = ( y + 1 ) % height;
-			var lx = x - 1 < 0 ? width - 1 : x - 1;
-			var ux = ( x + 1 ) % width;
+		for (var y = 0; y < height; y++) {
+			var ly = y - 1 < 0 ? 0 : y - 1;
+			var uy = y + 1 > height - 1 ? height - 1 : y + 1;
+			var lx = x - 1 < 0 ? 0 : x - 1;
+			var ux = x + 1 > width - 1 ? width - 1 : x + 1;
 
 			var points = [];
 			var origin = [0, 0, data[(y * width + x) * 4]];
