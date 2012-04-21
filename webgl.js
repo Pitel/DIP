@@ -23,7 +23,7 @@ $(function() {
 		grid.computeTangents();
 		THREE.uDisplacementBias = -2048;
 		THREE.uDisplacementScale = deminfo.w;
-		THREE.LODwireframe = true;
+		THREE.LODwireframe = false;
 		var lod = new THREE.ChunkedLOD(0, 0, deminfo.w, deminfo.h, 0, 0, grid, 0);
 		//lod.terrain.visible = true;
 		//console.log(lod);
