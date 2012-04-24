@@ -28,7 +28,7 @@ def cache(l, x, y, w, h, r):
 class Tiler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		url = urlparse(self.path)
-		print url
+		#print url
 		if url.path.startswith("/chunk/"):
 			query = url.path.split("/")[-1].split(".")[0].split("_")
 			#print query
@@ -62,6 +62,8 @@ class Tiler(BaseHTTPRequestHandler):
 					self.send_header('Content-type', 'text/html')
 				elif url.path.endswith('.png'):
 					self.send_header('Content-type', 'image/png')
+				elif url.path.endswith('.jpg'):
+					self.send_header('Content-type', 'image/jepg')
 				self.end_headers()
 				self.wfile.write(f.read())
 				f.close()
