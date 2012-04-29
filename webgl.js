@@ -43,6 +43,18 @@ $(function() {
 		control.movementSpeed = 1000;
 		scene.add(camera);
 
+		/*
+		var path = "skybox/";
+		var format = '.jpg';
+		var reflectionCube = THREE.ImageUtils.loadTextureCube([path + 'px' + format, path + 'nx' + format, path + 'py' + format, path + 'ny' + format, path + 'pz' + format, path + 'nz' + format]);
+		reflectionCube.format = THREE.RGBFormat;
+		var skyshader = THREE.ShaderUtils.lib["cube"];
+		skyshader.uniforms["tCube"].texture = reflectionCube;
+		var skymesh = new THREE.Mesh(new THREE.CubeGeometry(1000, 1000, 1000), new THREE.ShaderMaterial({fragmentShader: skyshader.fragmentShader, vertexShader: skyshader.vertexShader, uniforms: skyshader.uniforms, depthWrite: false}));
+		skymesh.flipSided = true;
+		scene.add(skymesh);
+		*/
+
 		var gui = new dat.GUI();
 		gui.add(THREE, "tau", 0, 10);
 		var wirectrl = gui.add(THREE, "LODwireframe");
@@ -75,6 +87,7 @@ $(function() {
 			stats.update();
 			control.update(clock.getDelta());
 			lod.update(camera);
+			//skymesh.position = camera.position;
 			renderer.render(scene, camera);
 		}
 	});
