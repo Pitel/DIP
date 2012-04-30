@@ -10,7 +10,7 @@ $(function() {
 		//console.log(deminfo);
 		var width = $(window).width(), height = $(window).height();
 		THREE.K = width / (2 * Math.tan((fov * Math.PI) / 360));
-		THREE.tau = 2;
+		THREE.tau = 3;
 		var container = $("body");
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setSize(width, height);
@@ -25,15 +25,15 @@ $(function() {
 		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 255, 255);
 		grid.applyMatrix(new THREE.Matrix4().rotateY(Math.PI / 2));
 		grid.computeTangents();
-		THREE.uDisplacementBias = -2048;
-		THREE.uDisplacementScale = deminfo.w;
+		THREE.uDisplacementBias = -9999/4;
+		THREE.uDisplacementScale = 0xff/4;
 		THREE.LODwireframe = false;
 		var lod = new THREE.ChunkedLOD(0, 0, deminfo.w, deminfo.h, 0, 0, grid, 0);
 		//lod.terrain.visible = true;
 		//console.log(lod);
 		scene.add(lod);
 
-		//scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));
+		//scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));	//Calibartion grid
 
 		var sun = new THREE.DirectionalLight();
 		sun.position.set(0, 0.5, 1).normalize();
@@ -65,11 +65,11 @@ $(function() {
 		wirectrl.onFinishChange(function() {
 			lod.wireframe();
 		});
-		var displacementbias = gui.add(THREE, "uDisplacementBias", -5000, 5000);
+		var displacementbias = gui.add(THREE, "uDisplacementBias");
 		displacementbias.onChange(function() {
 			lod.displacement();
 		});
-		var displacementscale = gui.add(THREE, "uDisplacementScale", 0, 50000);
+		var displacementscale = gui.add(THREE, "uDisplacementScale");
 		displacementscale.onChange(function() {
 			lod.displacement();
 		});
