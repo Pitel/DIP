@@ -17,9 +17,10 @@ $(function() {
 		container.append(renderer.domElement);
 		var clock = new THREE.Clock();
 		var scene = new THREE.Scene();
-		//scene.fog = new THREE.Fog(0xffffff, 10000, 12000);
+		scene.fog = new THREE.Fog(0xffffff, Math.min(deminfo.w, deminfo.h) * 0.8, Math.min(deminfo.w, deminfo.h));
 
 		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 255, 255);
+		grid.applyMatrix(new THREE.Matrix4().rotateY(Math.PI / 2));
 		grid.computeTangents();
 		THREE.uDisplacementBias = -2048;
 		THREE.uDisplacementScale = deminfo.w;

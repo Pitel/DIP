@@ -37,10 +37,14 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 			context.putImageData(e.data, 0, 0);
 			uniforms["tNormal"].texture = new THREE.Texture(canvas);
 			uniforms["tNormal"].texture.needsUpdate = true;
-			uniforms["uNormalScale"].value = 16;
+			uniforms["uNormalScale"].value = 8;
 			uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
 			uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
-			uniforms["uDiffuseColor"].value.setHex(Math.random() * 0xffffff); //Random chunk color
+			/*
+			uniforms["enableDiffuse"].value = true;
+			uniforms["tDiffuse"].texture = uniforms["tDisplacement"].texture;
+			*/
+			uniforms["uDiffuseColor"].value.setHex(Math.random() * 0xffffff);	//Random chunk color
 			_this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, wireframe: THREE.LODwireframe, fog: true}));
 			var scale = 1 / Math.pow(2, level);
 			_this.terrain.scale = new THREE.Vector3(scale, scale, scale);
@@ -87,10 +91,10 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 			//if (level < 2) {	//DEBUG
 			if (this.w / 2 > 256 && this.h / 2 > 256) {
 				var halfx = Math.round(this.x1 + this.w / 2), halfy = Math.round(this.y1 + this.h / 2);
-				this.LODs.add(new THREE.ChunkedLOD(this.x1, this.y1, halfx, halfy, -this.w / 4, -this.h / 4, this.grid, this.level + 1));
-				this.LODs.add(new THREE.ChunkedLOD(halfx, this.y1, this.x2, halfy, -this.w / 4, +this.h / 4, this.grid, this.level + 1));
-				this.LODs.add(new THREE.ChunkedLOD(this.x1, halfy, halfx, this.y2, +this.w / 4, -this.h / 4, this.grid, this.level + 1));
-				this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, this.x2, this.y2, +this.w / 4, +this.h / 4, this.grid, this.level + 1));
+				this.LODs.add(new THREE.ChunkedLOD(this.x1, this.y1, halfx, halfy, -this.w / 4, +this.h / 4, this.grid, this.level + 1));
+				this.LODs.add(new THREE.ChunkedLOD(halfx, this.y1, this.x2, halfy, +this.w / 4, +this.h / 4, this.grid, this.level + 1));
+				this.LODs.add(new THREE.ChunkedLOD(this.x1, halfy, halfx, this.y2, -this.w / 4, -this.h / 4, this.grid, this.level + 1));
+				this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, this.x2, this.y2, +this.w / 4, -this.h / 4, this.grid, this.level + 1));
 				this.add(this.LODs);
 			}
 			//}
