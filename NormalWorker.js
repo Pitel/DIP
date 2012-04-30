@@ -24,7 +24,7 @@ onmessage = function(e) {
 			y = height - 1;
 		}
 		var i = (y * width + x) * 4;
-		var h = (data[i] * 255 + data[i + 1]) / 0xffff;
+		var h = (data[i] + data[i + 1] * 255) / 0xff;
 		//if (x == 0x80 && y == 0x80) postMessage({log: h});
 		return h;
 	}
