@@ -19,10 +19,6 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 	var _this = this;
 	uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("chunk/" + level + "_" + x1 + "_" + y1 + "_" + w + "_" + h + "_256.png", new THREE.UVMapping(), function() {	//Load texture and create basic terrain when it's loaded
-		/*
-		uniforms["tDisplacement"].texture.type = THREE.UnsignedShortType;
-		uniforms["tDisplacement"].texture.needsUpdate = true;
-		*/
 		uniforms["tDisplacement"].texture.image.width = 256;
 		uniforms["tDisplacement"].texture.image.height = 256;
 
@@ -35,9 +31,11 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 		var worker = new Worker('NormalWorker.js');
 		worker.onmessage = function(e) {	//Normals are calculated
 			context.putImageData(e.data, 0, 0);
+			/*
 			uniforms["tNormal"].texture = new THREE.Texture(canvas);
 			uniforms["tNormal"].texture.needsUpdate = true;
 			uniforms["uNormalScale"].value = 8;
+			*/
 			uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
 			uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
 			/*
@@ -45,7 +43,7 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 			uniforms["tDiffuse"].texture = uniforms["tDisplacement"].texture;
 			*/
 			uniforms["uDiffuseColor"].value.setHex(Math.random() * 0xffffff);	//Random chunk color
-			_this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, wireframe: THREE.LODwireframe, fog: true}));
+			_this.terrain = new THREE.Mesh(grid, new THREE.ShaderMaterial({fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader.replace("dv.x", "(dv.y * 255.0 + dv.x)"), uniforms: uniforms, lights: true, wireframe: THREE.LODwireframe, fog: true}));
 			var scale = 1 / Math.pow(2, level);
 			_this.terrain.scale = new THREE.Vector3(scale, scale, scale);
 			_this.terrain.visible = false;

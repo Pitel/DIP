@@ -1,25 +1,30 @@
 #!/usr/bin/env python
 
-import os.path, sys, gdal, numpy, scipy.ndimage, json, png
+import os.path, sys, gdal, numpy, scipy.ndimage, json
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from urlparse import urlparse
 from gdalconst import *
 from tempfile import gettempdir
+from PIL import Image
 
 def cache(l, x, y, w, h, r):
 	path = gettempdir() + "/%s_%d_%d_%d_%d_%d_%d.png" % (os.path.split(dataset.GetDescription())[1], l, x, y, w, h, r)
 	#print path
 	if not os.path.exists(path):
+	#if True:
 		#print "caching"
 		tile = dem[x:x+w, y:y+h]
-		f = open(path, "wb")
-		w = png.Writer(r, r, greyscale = True, bitdepth = 16)
+		#f = open(path, "wb")
+		#w = png.Writer(r, r, greyscale = True, bitdepth = 16)
 		imagedata = scipy.ndimage.interpolation.zoom(tile, float(r) / tile.shape[0], order = 1)
 		normalizer = numpy.empty_like(imagedata)
 		normalizer.fill(dem.min() * -1)
 		normalized = numpy.add(imagedata, normalizer)
-		w.write(f, normalized)
-		f.close()
+		#w.write(f, normalized)
+		#f.close()
+		normalized += 0xff000000	#alpha
+		pilImage = Image.frombuffer('RGBA', (r, r), normalized, 'raw', 'RGBA', 0, 1)
+		pilImage.save(path)
 	else:
 		pass
 		#print "caching not necessary"
