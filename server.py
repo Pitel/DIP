@@ -14,16 +14,10 @@ def cache(l, x, y, w, h, r):
 	#if True:
 		#print "caching"
 		tile = dem[x:x+w, y:y+h]
-		#f = open(path, "wb")
-		#w = png.Writer(r, r, greyscale = True, bitdepth = 16)
 		imagedata = scipy.ndimage.interpolation.zoom(tile, float(r) / tile.shape[0], order = 1)
-		normalizer = numpy.empty_like(imagedata)
-		normalizer.fill(dem.min() * -1)
-		normalized = numpy.add(imagedata, normalizer)
-		#w.write(f, normalized)
-		#f.close()
-		normalized += 0xff000000	#alpha
-		pilImage = Image.frombuffer('RGBA', (r, r), normalized, 'raw', 'RGBA', 0, 1)
+		imagedata -= dem.min()
+		imagedata += 0xff000000	#alpha
+		pilImage = Image.frombuffer('RGBA', (r, r), imagedata, 'raw', 'RGBA', 0, 1)
 		pilImage.save(path)
 	else:
 		pass
