@@ -20,8 +20,8 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 	var _this = this;
 	uniforms["tDisplacement"].texture = THREE.ImageUtils.loadTexture("chunk/" + level + "_" + x1 + "_" + y1 + "_" + w + "_" + h + "_256.png", new THREE.UVMapping(), function() {	//Load texture and create basic terrain when it's loaded
 		/*
-		shader.uniforms["tDisplacement"].texture.image.type = THREE.UnsignedShortType;
-		shader.uniforms["tDisplacement"].texture.needsUpdate = true;
+		uniforms["tDisplacement"].texture.type = THREE.UnsignedShortType;
+		uniforms["tDisplacement"].texture.needsUpdate = true;
 		*/
 		uniforms["tDisplacement"].texture.image.width = 256;
 		uniforms["tDisplacement"].texture.image.height = 256;
