@@ -15,6 +15,9 @@ $(function() {
 		var renderer = new THREE.WebGLRenderer({antialias: true});
 		renderer.setSize(width, height);
 		container.append(renderer.domElement);
+		THREE.anaglyph = false;
+		var effect = new THREE.AnaglyphEffect(renderer);
+		effect.setSize(width, height);
 		var clock = new THREE.Clock();
 		var scene = new THREE.Scene();
 		scene.fog = new THREE.Fog(0xffffff, Math.min(deminfo.w, deminfo.h) * 0.8, Math.min(deminfo.w, deminfo.h));
@@ -70,6 +73,7 @@ $(function() {
 		displacementscale.onChange(function() {
 			lod.displacement();
 		});
+		gui.add(THREE, "anaglyph");
 
 		var stats = new Stats();
 		stats.getDomElement().style.position = "absolute";
@@ -89,7 +93,11 @@ $(function() {
 			control.update(clock.getDelta());
 			lod.update(camera);
 			//skymesh.position = camera.position;
-			renderer.render(scene, camera);
+			if (THREE.anaglyph) {
+				effect.render(scene, camera);
+			} else {
+				renderer.render(scene, camera);
+			}
 		}
 	});
 });
