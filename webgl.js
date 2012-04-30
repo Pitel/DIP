@@ -25,8 +25,8 @@ $(function() {
 		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 255, 255);
 		grid.applyMatrix(new THREE.Matrix4().rotateY(Math.PI / 2));
 		grid.computeTangents();
-		THREE.uDisplacementBias = -9999/2;
-		THREE.uDisplacementScale = 127;
+		THREE.uDisplacementBias = -9999/4;
+		THREE.uDisplacementScale = 0xff/4;
 		THREE.LODwireframe = false;
 		var lod = new THREE.ChunkedLOD(0, 0, deminfo.w, deminfo.h, 0, 0, grid, 0);
 		//lod.terrain.visible = true;

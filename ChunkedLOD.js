@@ -30,12 +30,15 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 		context.drawImage(uniforms["tDisplacement"].texture.image, 0, 0);
 		var worker = new Worker('NormalWorker.js');
 		worker.onmessage = function(e) {	//Normals are calculated
+			if (e.data.log) {
+				console.log(e.data.log);
+				return;
+			}
 			context.putImageData(e.data, 0, 0);
-			/*
+			//$("body").prepend(canvas); return;
 			uniforms["tNormal"].texture = new THREE.Texture(canvas);
 			uniforms["tNormal"].texture.needsUpdate = true;
-			uniforms["uNormalScale"].value = 8;
-			*/
+			//uniforms["uNormalScale"].value = 1;
 			uniforms["uDisplacementBias"].value = THREE.uDisplacementBias;
 			uniforms["uDisplacementScale"].value = THREE.uDisplacementScale;
 			/*

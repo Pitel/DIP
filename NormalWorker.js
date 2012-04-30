@@ -12,6 +12,23 @@ onmessage = function(e) {
 		return [a[0] / l, a[1] / l, a[2] / l];
 	}
 
+	var getheight = function(x, y) {
+		if (x < 0) {
+			x = 0;
+		} else if (x > height - 1) {
+			x = height - 1;
+		}
+		if (y < 0) {
+			y = 0;
+		} else if (y > height - 1) {
+			y = height - 1;
+		}
+		var i = (y * width + x) * 4;
+		var h = (data[i] * 255 + data[i + 1]) / 0xffff;
+		//if (x == 0x80 && y == 0x80) postMessage({log: h});
+		return h;
+	}
+
 	var dem = e.data.dem;
 	var data = dem.data;
 	var outimg = e.data.normal;
@@ -21,21 +38,16 @@ onmessage = function(e) {
 
 	for (var x = 0; x < width; x++) {
 		for (var y = 0; y < height; y++) {
-			var ly = y - 1 < 0 ? 0 : y - 1;
-			var uy = y + 1 > height - 1 ? height - 1 : y + 1;
-			var lx = x - 1 < 0 ? 0 : x - 1;
-			var ux = x + 1 > width - 1 ? width - 1 : x + 1;
-
 			var points = [];
-			var origin = [0, 0, data[(y * width + x) * 4]];
-			points.push([-1, 0, data[(y * width + lx) * 4]]);
-			points.push([-1, -1, data[(ly * width + lx) * 4]]);
-			points.push([0, -1, data[(ly * width + x) * 4]]);
-			points.push([1, -1, data[(ly * width + ux) * 4]]);
-			points.push([1, 0, data[(y * width + ux) * 4]]);
-			points.push([1, 1, data[(uy * width + ux) * 4]]);
-			points.push([0, 1, data[(uy * width + x) * 4]]);
-			points.push([-1, 1, data[(uy * width + lx) * 4]]);
+			var origin = [0,  0, getheight(x    , y)];
+			points.push([-1,  0, getheight(x - 1, y)]);
+			points.push([-1, -1, getheight(x - 1, y - 1)]);
+			points.push([ 0, -1, getheight(x    , y - 1)]);
+			points.push([ 1, -1, getheight(x + 1, y - 1)]);
+			points.push([ 1,  0, getheight(x + 1, y)]);
+			points.push([ 1,  1, getheight(x + 1, y + 1)]);
+			points.push([ 0,  1, getheight(x    , y + 1)]);
+			points.push([-1,  1, getheight(x - 1, y + 1)]);
 
 			var normals = [];
 			var num_points = points.length;
@@ -59,6 +71,7 @@ onmessage = function(e) {
 			normal[0] /= normals.length;
 			normal[1] /= normals.length;
 			normal[2] /= normals.length;
+			//if (x % 10 == 0 && y % 10 == 0) postMessage({log: normal});
 
 			var idx = (y * width + x) * 4;
 			output[idx] = ((normal[0] + 1) / 2 * 255) | 0;
