@@ -85,7 +85,7 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 			THREE.SceneUtils.showHierarchy(this.LODs, false);
 		}
 	} else {	//Display chunks
-		if (!this.LODs) {	//chunks tiles when needed
+		if (!this.LODs) {	//Create chunks tiles when needed
 			//console.log("Loading level " + (this.level + 1));
 			this.terrain.visible = true;
 			this.LODs = new THREE.Object3D();
