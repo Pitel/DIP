@@ -23,7 +23,7 @@ $(function() {
 		scene.fog = new THREE.Fog(0xffffff, Math.min(deminfo.w, deminfo.h) * 0.8, Math.min(deminfo.w, deminfo.h));
 
 		var grid = new THREE.PlaneGeometry(deminfo.w, deminfo.h, 255, 255);
-		grid.applyMatrix(new THREE.Matrix4().rotateY(Math.PI / 2));
+		grid.applyMatrix(new THREE.Matrix4().rotateY(-Math.PI / 2));
 		grid.computeTangents();
 		THREE.uDisplacementBias = -9999/4;
 		THREE.uDisplacementScale = 0xff/4;
@@ -60,20 +60,24 @@ $(function() {
 		*/
 
 		var gui = new dat.GUI();
-		gui.add(THREE, "tau", 0, 10);
+		gui.add(THREE, "tau", 0, 10).name("τ");
 		var wirectrl = gui.add(THREE, "LODwireframe");
+		wirectrl.name("Wireframe");
 		wirectrl.onFinishChange(function() {
 			lod.wireframe();
 		});
-		var displacementbias = gui.add(THREE, "uDisplacementBias");
+		gui.add(THREE, "anaglyph").name("Anaglyph 3D");
+		var displacementgui = gui.addFolder("Displacement");
+		var displacementbias = displacementgui.add(THREE, "uDisplacementBias");
+		displacementbias.name("Bias");
 		displacementbias.onChange(function() {
 			lod.displacement();
 		});
-		var displacementscale = gui.add(THREE, "uDisplacementScale");
+		var displacementscale = displacementgui.add(THREE, "uDisplacementScale");
+		displacementscale.name("Scale");
 		displacementscale.onChange(function() {
 			lod.displacement();
 		});
-		gui.add(THREE, "anaglyph");
 
 		var stats = new Stats();
 		stats.getDomElement().style.position = "absolute";
