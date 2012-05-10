@@ -33,7 +33,9 @@ $(function() {
 		//console.log(lod);
 		scene.add(lod);
 
-		//scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));	//Calibartion grid
+		var reference = new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true}));
+		reference.visible = false;
+		scene.add(reference);	//Calibartion grid
 
 		var sun = new THREE.DirectionalLight();
 		sun.position.set(0, 0.5, 1).normalize();
@@ -67,6 +69,7 @@ $(function() {
 			lod.wireframe();
 		});
 		gui.add(THREE, "anaglyph").name("Anaglyph 3D");
+		gui.add(reference, "visible").name("Reference grid");
 		var displacementgui = gui.addFolder("Displacement");
 		var displacementbias = displacementgui.add(THREE, "uDisplacementBias");
 		displacementbias.name("Bias");
