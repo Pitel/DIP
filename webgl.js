@@ -27,13 +27,16 @@ $(function() {
 		grid.computeTangents();
 		THREE.uDisplacementBias = -9999/4;
 		THREE.uDisplacementScale = 0xff/4;
+		THREE.uNormalScale = 1;
 		THREE.LODwireframe = false;
 		var lod = new THREE.ChunkedLOD(0, 0, deminfo.w, deminfo.h, 0, 0, grid, 0);
 		//lod.terrain.visible = true;
 		//console.log(lod);
 		scene.add(lod);
 
-		//scene.add(new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true})));	//Calibartion grid
+		var reference = new THREE.Mesh(THREE.GeometryUtils.clone(grid), new THREE.MeshBasicMaterial({color: 0xff0000, fog: false, wireframe: true}));
+		reference.visible = false;
+		scene.add(reference);	//Calibartion grid
 
 		var sun = new THREE.DirectionalLight();
 		sun.position.set(0, 0.5, 1).normalize();
@@ -42,7 +45,7 @@ $(function() {
 
 		var camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, Math.sqrt(Math.pow(deminfo.w, 2) + Math.pow(deminfo.h, 2)));
 		camera.position.y = 10000 / 60;
-		var control = new THREE.FirstPersonControls(camera, renderer.domElement);
+		var control = new THREE.MyFirstPersonControls(camera, renderer.domElement);
 		control.lookSpeed = 0.1;
 		control.movementSpeed = 1000;
 		scene.add(camera);
@@ -67,6 +70,7 @@ $(function() {
 			lod.wireframe();
 		});
 		gui.add(THREE, "anaglyph").name("Anaglyph 3D");
+		gui.add(reference, "visible").name("Reference grid");
 		var displacementgui = gui.addFolder("Displacement");
 		var displacementbias = displacementgui.add(THREE, "uDisplacementBias");
 		displacementbias.name("Bias");
@@ -78,12 +82,17 @@ $(function() {
 		displacementscale.onChange(function() {
 			lod.displacement();
 		});
+		var normalscale = displacementgui.add(THREE, "uNormalScale", 0, 2);
+		normalscale.name("Normal");
+		normalscale.onChange(function() {
+			lod.displacement();
+		});
 
 		var stats = new Stats();
-		stats.getDomElement().style.position = "absolute";
-		stats.getDomElement().style.bottom = 0;
-		stats.getDomElement().style.right = 0;
-		container.append(stats.getDomElement());
+		stats.domElement.style.position = "absolute";
+		stats.domElement.style.bottom = 0;
+		stats.domElement.style.right = 0;
+		container.append(stats.domElement);
 
 		$("div").hover(function() {control.activeLook = false});
 		$("> canvas", container).hover(function() {control.activeLook = true});

@@ -60,7 +60,6 @@ THREE.ChunkedLOD = function(x1, y1, x2, y2, shiftx, shifty, grid, level) {
 
 THREE.ChunkedLOD.prototype = new THREE.Object3D();
 THREE.ChunkedLOD.prototype.constructor = THREE.ChunkedLOD;
-THREE.ChunkedLOD.prototype.supr = THREE.Object3D.prototype;
 
 THREE.ChunkedLOD.prototype.update = function(camera) {
 	if (!this.terrain) {
@@ -130,6 +129,7 @@ THREE.ChunkedLOD.prototype.displacement = function() {
 	if (this.terrain) {
 		this.terrain.material.uniforms.uDisplacementBias.value = THREE.uDisplacementBias;
 		this.terrain.material.uniforms.uDisplacementScale.value = THREE.uDisplacementScale;
+		this.terrain.material.uniforms.uNormalScale.value = THREE.uNormalScale;
 		if (this.LODs) {
 			for (var i = 0; i < this.LODs.children.length; i++) {
 				this.LODs.children[i].displacement();
