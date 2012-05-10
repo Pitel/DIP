@@ -80,10 +80,10 @@ $(function() {
 		});
 
 		var stats = new Stats();
-		stats.getDomElement().style.position = "absolute";
-		stats.getDomElement().style.bottom = 0;
-		stats.getDomElement().style.right = 0;
-		container.append(stats.getDomElement());
+		stats.domElement.style.position = "absolute";
+		stats.domElement.style.bottom = 0;
+		stats.domElement.style.right = 0;
+		container.append(stats.domElement);
 
 		$("div").hover(function() {control.activeLook = false});
 		$("> canvas", container).hover(function() {control.activeLook = true});
