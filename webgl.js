@@ -42,7 +42,7 @@ $(function() {
 
 		var camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, Math.sqrt(Math.pow(deminfo.w, 2) + Math.pow(deminfo.h, 2)));
 		camera.position.y = 10000 / 60;
-		var control = new THREE.FirstPersonControls(camera, renderer.domElement);
+		var control = new THREE.MyFirstPersonControls(camera, renderer.domElement);
 		control.lookSpeed = 0.1;
 		control.movementSpeed = 1000;
 		scene.add(camera);
