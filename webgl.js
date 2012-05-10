@@ -27,6 +27,7 @@ $(function() {
 		grid.computeTangents();
 		THREE.uDisplacementBias = -9999/4;
 		THREE.uDisplacementScale = 0xff/4;
+		THREE.uNormalScale = 1;
 		THREE.LODwireframe = false;
 		var lod = new THREE.ChunkedLOD(0, 0, deminfo.w, deminfo.h, 0, 0, grid, 0);
 		//lod.terrain.visible = true;
@@ -79,6 +80,11 @@ $(function() {
 		var displacementscale = displacementgui.add(THREE, "uDisplacementScale");
 		displacementscale.name("Scale");
 		displacementscale.onChange(function() {
+			lod.displacement();
+		});
+		var normalscale = displacementgui.add(THREE, "uNormalScale", 0, 2);
+		normalscale.name("Normal");
+		normalscale.onChange(function() {
 			lod.displacement();
 		});
 

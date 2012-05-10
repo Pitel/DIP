@@ -129,6 +129,7 @@ THREE.ChunkedLOD.prototype.displacement = function() {
 	if (this.terrain) {
 		this.terrain.material.uniforms.uDisplacementBias.value = THREE.uDisplacementBias;
 		this.terrain.material.uniforms.uDisplacementScale.value = THREE.uDisplacementScale;
+		this.terrain.material.uniforms.uNormalScale.value = THREE.uNormalScale;
 		if (this.LODs) {
 			for (var i = 0; i < this.LODs.children.length; i++) {
 				this.LODs.children[i].displacement();
