@@ -88,7 +88,7 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 			//console.log("Loading level " + (this.level + 1));
 			this.terrain.visible = true;
 			this.LODs = new THREE.Object3D();
-			if (this.level < 3) {	//DEBUG
+			//if (this.level < 3) {	//DEBUG
 			if (this.w / 2 > 256 && this.h / 2 > 256) {
 				var halfx = Math.round(this.x1 + this.w / 2), halfy = Math.round(this.y1 + this.h / 2);
 				this.LODs.add(new THREE.ChunkedLOD(this.x1, this.y1, halfx, halfy, +this.w / 4, -this.h / 4, this.grid, this.level + 1));
@@ -97,7 +97,7 @@ THREE.ChunkedLOD.prototype.update = function(camera) {
 				this.LODs.add(new THREE.ChunkedLOD(halfx, halfy, this.x2, this.y2, -this.w / 4, +this.h / 4, this.grid, this.level + 1));
 				this.add(this.LODs);
 			}
-			}
+			//}
 		} else {
 			if (rdy == 4) {	//Chunks are really ready
 				this.terrain.visible = false;
